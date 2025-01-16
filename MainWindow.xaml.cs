@@ -1,21 +1,8 @@
-﻿using System.Net;
-using System.Security.AccessControl;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using Lavie;
-using S7.Net;
-using System.Net.NetworkInformation;
-using System.Threading.Tasks;
 using Microsoft.Web.WebView2.Core;
 
 namespace LavieDemo
@@ -47,18 +34,65 @@ namespace LavieDemo
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromMicroseconds(200); // Timer cập nhật counter
             _timer.Tick += Timer_Tick; // Gắn sự kiện Tick
+            //Start timer update data
+            _timer.Start();
         }
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            Console.WriteLine("Timer1 started");
+            //Đọc dữ liệu counter
             _totalCount = int.Parse(plc.ReadData("DB1.DBW2")); //Đọc biến total_count trên DB1
             _okCount = int.Parse(plc.ReadData("DB1.DBW4")); //Đọc biến ok_count trên DB1
+            double okCountPercent = Math.Round(((double)(_okCount/_totalCount) * 100),2);
             _ngCount = _totalCount - _okCount;
-            totalCountLabel.Text = _totalCount.ToString(); 
-            okCountLabel.Text = _okCount.ToString();
-            ngCountLabel.Text = _ngCount.ToString();
+            totalCountLabel.Text = _totalCount.ToString();
+            okCountLabel.Text = _okCount.ToString() + " (" + okCountPercent.ToString() + "%)";
+            ngCountLabel.Text = _ngCount.ToString() + " (" + (100-okCountPercent).ToString() + "%)";
+            //Đọc trạng thái start/stop
+            bool new_app_status = false;
+            if (plc.ReadData("DB1.DBX0.1") == "True")
+            {
+                new_app_status = true;
+            }
+            if (new_app_status != _appStatus)
+            {
+                if (_appStatus == true)
+                {
+                    _appStatus = false;
+                    status_app.Fill = new SolidColorBrush(Colors.Red);
+                    button_stop.IsEnabled = false;
+                    button_start.IsEnabled = true;
+                    button_reset.IsEnabled = true;
+                }
+                else
+                {
+                    _appStatus = true;
+                    status_app.Fill = new SolidColorBrush(Colors.LimeGreen);
+                    button_stop.IsEnabled = true;
+                    button_start.IsEnabled = false;
+                    button_reset.IsEnabled = false;
+                }
+            }
+            //Đọc trạng thái cam
+            bool new_cam_status = false;
+            if (plc.ReadData("DB1.DBX0.0") == "True")
+            {
+                new_cam_status = true;
+            }
+            if (new_cam_status != _camStatus)
+            {
+                if (_camStatus == true)
+                {
+                    _camStatus = false;
+                    status_cam.Fill = new SolidColorBrush(Colors.Red);
+                }
+                else
+                {
+                    _camStatus = true;
+                    status_cam.Fill = new SolidColorBrush(Colors.LimeGreen);
+                }
+            }
         }
-        
+
         private void InitPLC()
         {
             // Khởi tạo PLC (CPU loại S7-1200, địa chỉ IP là 192.168.1.11, Rack 0, Slot 1)
@@ -69,22 +103,8 @@ namespace LavieDemo
                 {
                     _plcStatus = true;
                     status_plc.Fill = new SolidColorBrush(Colors.LimeGreen); //cập nhật status của plc
-                    //Đọc dữ liệu từ PLC
-                    _totalCount = int.Parse(plc.ReadData("DB1.DBW2")); //Đọc biến total_count trên DB1
-                    _okCount = int.Parse(plc.ReadData("DB1.DBW4")); //Đọc biến ok_count trên DB1
-                    _ngCount = _totalCount - _okCount;
-                    totalCountLabel.Text = _totalCount.ToString();
-                    okCountLabel.Text = _okCount.ToString();
-                    ngCountLabel.Text = _ngCount.ToString();
-                    //Đọc trạng thái start/stop
-                    if (plc.ReadData("DB1.DBX0.1") == "True")
-                    {
-                        _appStatus = true;
-                        status_app.Fill = new SolidColorBrush(Colors.LimeGreen);
-                        button_stop.IsEnabled = true;
-                        button_start.IsEnabled = false;
-                        button_reset.IsEnabled = false;
-                    }
+
+                    
                 }
             }
             catch (Exception ex)
@@ -110,11 +130,10 @@ namespace LavieDemo
                         _camStatus = true;
                         status_cam.Fill = new SolidColorBrush(Colors.LimeGreen);
                     }
-                    else
-                    {
-                        MessageBox.Show("Cannot read camera status from PLC. Check again!", "Camera Status Reading Error", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-
+                }
+                else
+                {
+                    MessageBox.Show("Cannot read camera status from PLC. Check again!", "Camera Status Reading Error", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
@@ -182,6 +201,31 @@ namespace LavieDemo
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
             webView2.Reload(); // Làm mới trang hiện tại
+        }
+
+        private void button_setting_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.ShowDialog();
+            if (loginWindow.IsAuthenticated)
+            {
+                SettingWindow settingWindow = new SettingWindow();
+                settingWindow.ShowDialog();
+            }
+        }
+
+        private void refresh_cam_status_Click(object sender, RoutedEventArgs e)
+        {
+            if (plc.ReadData("DB1.DBX0.0") == "True")
+            {
+                _camStatus = true;
+                status_cam.Fill = new SolidColorBrush(Colors.LimeGreen);
+            }
+            else
+            {
+                _camStatus = false;
+                status_cam.Fill = new SolidColorBrush(Colors.Red);
+            }
         }
     }
 }
