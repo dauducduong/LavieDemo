@@ -34,6 +34,7 @@ namespace LavieDemo
         private int _okCount = 0;
         private int _ngCount = 0;
         private DispatcherTimer _timer;
+        private DispatcherTimer _timer2;
         public MainWindow()
         {
             InitializeComponent();
