@@ -34,7 +34,6 @@ namespace LavieDemo
         private int _okCount = 0;
         private int _ngCount = 0;
         private DispatcherTimer _timer;
-        private DispatcherTimer _timer2;
         public MainWindow()
         {
             InitializeComponent();
@@ -62,7 +61,7 @@ namespace LavieDemo
         
         private void InitPLC()
         {
-            // Khởi tạo PLC (CPU loại S7-1200, địa chỉ IP là 192.168.0.1, Rack 0, Slot 1)
+            // Khởi tạo PLC (CPU loại S7-1200, địa chỉ IP là 192.168.1.11, Rack 0, Slot 1)
             try
             {
                 plc.Connect("192.168.1.11");
