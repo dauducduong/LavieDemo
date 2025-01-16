@@ -105,8 +105,8 @@
                     <webview2:WebView2 x:Name="webView2" Source=""/>
                 </Border>
             </Grid>
-            
-            
+
+
             <Grid Grid.Column="1" Margin="5 0 0 0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.5*"/>
@@ -121,7 +121,7 @@
                 </Border>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
@@ -147,13 +147,13 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Border Grid.Row="0" Background="LightGray">
-                            <TextBlock x:Name="totalCountLabel" FontSize="25" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" >0</TextBlock>
+                            <TextBlock x:Name="totalCountLabel" FontSize="25" FontWeight="SemiBold" VerticalAlignment="Center" Margin="20">0</TextBlock>
                         </Border>
                         <Border Grid.Row="1" Background="LimeGreen">
-                            <TextBlock x:Name="okCountLabel" FontSize="25" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" >0</TextBlock>
+                            <TextBlock x:Name="okCountLabel" FontSize="25" FontWeight="SemiBold" VerticalAlignment="Center" Margin="20">0</TextBlock>
                         </Border>
                         <Border Grid.Row="2" Background="Red">
-                            <TextBlock x:Name="ngCountLabel" FontSize="25" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" >0</TextBlock>
+                            <TextBlock x:Name="ngCountLabel" FontSize="25" FontWeight="SemiBold" VerticalAlignment="Center" Margin="20">0</TextBlock>
                         </Border>
                     </Grid>
                 </Grid>

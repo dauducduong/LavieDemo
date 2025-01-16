@@ -42,10 +42,11 @@ namespace LavieDemo
             //Đọc dữ liệu counter
             _totalCount = int.Parse(plc.ReadData("DB1.DBW2")); //Đọc biến total_count trên DB1
             _okCount = int.Parse(plc.ReadData("DB1.DBW4")); //Đọc biến ok_count trên DB1
+            double okCountPercent = Math.Round(((double)(_okCount/_totalCount) * 100),2);
             _ngCount = _totalCount - _okCount;
-            totalCountLabel.Text = _totalCount.ToString(); 
-            okCountLabel.Text = _okCount.ToString();
-            ngCountLabel.Text = _ngCount.ToString();
+            totalCountLabel.Text = _totalCount.ToString();
+            okCountLabel.Text = _okCount.ToString() + " (" + okCountPercent.ToString() + "%)";
+            ngCountLabel.Text = _ngCount.ToString() + " (" + (100-okCountPercent).ToString() + "%)";
             //Đọc trạng thái start/stop
             bool new_app_status = false;
             if (plc.ReadData("DB1.DBX0.1") == "True")
