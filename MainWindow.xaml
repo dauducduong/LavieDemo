@@ -42,9 +42,16 @@
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Border Grid.Column="0" Background="LightGray" Margin="0 0 0 1">
-                        <TextBlock FontSize="18" ToolTip="Online status of camera" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5 0 0 0">Camera</TextBlock>
-                    </Border>
+                    <Grid Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="LightGray" Margin="0 0 0 1">
+                            <TextBlock FontSize="18" ToolTip="Online status of camera" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5 0 0 0">Camera</TextBlock>
+                        </Border>
+                        <Border Grid.Column="1" Background="LightGray" Margin="0 0 0 1"/>
+                    </Grid>
                     <Border Grid.Column="1" Background="LightGray" Margin="0 0 0 1">
                         <Ellipse x:Name="status_cam" Width="20" Height="20" Fill="Red" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
