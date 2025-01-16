@@ -34,7 +34,6 @@ namespace LavieDemo
         private int _okCount = 0;
         private int _ngCount = 0;
         private DispatcherTimer _timer;
-        private DispatcherTimer _timer2;
         public MainWindow()
         {
             InitializeComponent();
@@ -189,12 +188,10 @@ namespace LavieDemo
         {
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.ShowDialog();
-
             if (loginWindow.IsAuthenticated)
             {
-                // Mở cài đặt
-                MessageBox.Show("Mở cài đặt phần mềm.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Thêm logic mở cửa sổ cài đặt tại đây
+                SettingWindow settingWindow = new SettingWindow();
+                settingWindow.ShowDialog();
             }
         }
     }

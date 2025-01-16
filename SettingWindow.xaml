@@ -1,0 +1,62 @@
+﻿<Window x:Class="LavieDemo.SettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LavieDemo"
+        mc:Ignorable="d"
+        Title="Setting" Height="350" Width="400"
+        WindowStartupLocation="CenterScreen"
+        Background="LightGray">
+    <Grid Margin="20">
+        <!-- Define rows and columns -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Chủ đề -->
+            <RowDefinition Height="Auto"/>
+            <!-- Tự động khởi động -->
+            <RowDefinition Height="Auto"/>
+            <!-- Thư mục lưu trữ -->
+            <RowDefinition Height="Auto"/>
+            <!-- Độ sáng -->
+            <RowDefinition Height="*" />
+            <!-- Spacer -->
+            <RowDefinition Height="Auto"/>
+            <!-- Nút Lưu -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <!-- Label -->
+            <ColumnDefinition Width="*"/>
+            <!-- Input/Control -->
+            <ColumnDefinition Width="Auto"/>
+            <!-- Button/Text -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Chủ đề -->
+        <Label Content="Chọn chủ đề:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontSize="16"/>
+        <ComboBox x:Name="ThemeComboBox" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
+            <ComboBoxItem Content="Light" IsSelected="True"/>
+            <ComboBoxItem Content="Dark"/>
+        </ComboBox>
+
+        <!-- Tự động khởi động -->
+        <Label Content="Tự động khởi động:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontSize="16"/>
+        <CheckBox x:Name="AutoStartCheckBox" Grid.Row="1" Grid.Column="1" Content="Bật" IsChecked="False" VerticalAlignment="Center"/>
+
+        <!-- Thư mục lưu trữ -->
+        <Label Content="Thư mục lưu trữ:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontSize="16"/>
+        <Button x:Name="ChooseFolderButton" Grid.Row="2" Grid.Column="1" Content="Chọn..." Width="80" HorizontalAlignment="Left" Click="ChooseFolderButton_Click"/>
+        <TextBlock x:Name="FolderPathTextBlock" Grid.Row="2" Grid.Column="2" Text="Chưa chọn" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+
+        <!-- Độ sáng -->
+        <Label Content="Độ sáng:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontSize="16"/>
+        <Slider x:Name="BrightnessSlider" Grid.Row="3" Grid.Column="1" Minimum="0" Maximum="100" Value="50" Width="200" HorizontalAlignment="Left"/>
+
+        <!-- Spacer -->
+        <TextBlock Grid.Row="4" Grid.ColumnSpan="3"/>
+
+        <!-- Nút Lưu -->
+        <Button Content="Lưu cài đặt" Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" Width="120" Click="SaveSettingsButton_Click" FontSize="16"/>
+    </Grid>
+</Window>

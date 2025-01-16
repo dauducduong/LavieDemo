@@ -23,6 +23,7 @@ namespace LavieDemo
         public LoginWindow()
         {
             InitializeComponent();
+            UsernameTextBox.Focus();
         }
 
         private void button_login_Click(object sender, RoutedEventArgs e)
@@ -33,7 +34,6 @@ namespace LavieDemo
             if (username == "admin" && password == "admin")
             {
                 IsAuthenticated = true;
-                MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
             }
             else

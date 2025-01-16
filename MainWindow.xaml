@@ -6,7 +6,8 @@
         xmlns:webview2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:local="clr-namespace:LavieDemo"
         mc:Ignorable="d"
-        Title="Demo" Height="768" Width="1024">
+        Title="Demo" Height="768" Width="1024"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <!-- Hàng 1 -->
         <Grid.RowDefinitions>
@@ -61,10 +62,10 @@
                     </Border>
                 </Grid>
             </Grid>
-            <Border Grid.Column="0" Background="LightGray">
+            <Border Grid.Column="0" Background="LightBlue">
                 <Image Source="Resources/logo.png" Stretch="Uniform" Margin="10"/>
             </Border>
-            <Border Grid.Column="1" Background="LightGray">
+            <Border Grid.Column="1" Background="LightBlue">
                 <TextBlock FontSize="50" FontWeight="SemiBold" Text="DEMO NAVIE" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
 
@@ -93,7 +94,7 @@
                         <Button x:Name="refreshButton" ToolTip="Reload Live View" Content="&#xf021;" FontFamily="FontAwesome" FontSize="35" VerticalAlignment="Center" HorizontalAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" Click="refreshButton_Click" Width="74" Height="57"/>
                     </Border>
                 </Grid>
-                <Border Grid.Row="1" Background="LightYellow">
+                <Border Grid.Row="1" Background="LightGray">
                     <webview2:WebView2 x:Name="webView2" Source=""/>
                 </Border>
             </Grid>
