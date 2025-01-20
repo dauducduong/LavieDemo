@@ -52,19 +52,29 @@ namespace LavieDemo
 
         private void LogMessage(string message)
         {
-            message = message.Replace("Received: ", "");
-            // Append the message to a UI element, e.g., a TextBox or ListBox.
-            _totalCount++; //Đọc biến total_count trên DB1
-            if (message == compare_text.Text)
+            if (!message.StartsWith("Client "))
             {
-                _okCount++;
+                message = message.Replace("Received: ", "").TrimEnd('\n', '\r');
+                // Append the message to a UI element, e.g., a TextBox or ListBox.
+                _totalCount++; //Đọc biến total_count trên DB1
+                if (message == compare_text.Text)
+                {
+                    _okCount++;
+                    status_text.Text = "OK";
+                    status_text.Background = new SolidColorBrush(Colors.LimeGreen);
+                }
+                else
+                {
+                    status_text.Text = "NG";
+                    status_text.Background = new SolidColorBrush(Colors.Red);
+                }
+                double okCountPercent = Math.Round(((double)(_okCount / _totalCount) * 100), 2);
+                _ngCount = _totalCount - _okCount;
+                totalCountLabel.Text = _totalCount.ToString();
+                okCountLabel.Text = _okCount.ToString() + " (" + okCountPercent.ToString() + "%)";
+                ngCountLabel.Text = _ngCount.ToString() + " (" + (100 - okCountPercent).ToString() + "%)";
+                ocr_text.Text = message;
             }
-            double okCountPercent = Math.Round(((double)(_okCount / _totalCount) * 100), 2);
-            _ngCount = _totalCount - _okCount;
-            totalCountLabel.Text = _totalCount.ToString();
-            okCountLabel.Text = _okCount.ToString() + " (" + okCountPercent.ToString() + "%)";
-            ngCountLabel.Text = _ngCount.ToString() + " (" + (100 - okCountPercent).ToString() + "%)";
-            ocr_text.Text = message;
         }
 
         /*
@@ -92,7 +102,7 @@ namespace LavieDemo
         private void InitCamView()
         {
             webView2.Source = new Uri("http://192.168.0.10/pages/hmi/");
-            webView2.NavigationCompleted += WebView_NavigationCompleted;
+            //webView2.NavigationCompleted += WebView_NavigationCompleted;
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -156,6 +166,7 @@ namespace LavieDemo
             }
             */
         }
+        /*
         private void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             if (e.IsSuccess)
@@ -169,6 +180,7 @@ namespace LavieDemo
                 status_cam.Fill = new SolidColorBrush(Colors.LimeGreen);
             }
         }
+        */
 
         private void button_exit_Click(object sender, RoutedEventArgs e)
         {
@@ -190,7 +202,7 @@ namespace LavieDemo
                 //plc.WriteData("DB1.DBX0.1", true);
                 _timer.Start();
                 _appStatus = true;
-                status_app.Fill = new SolidColorBrush(Colors.LimeGreen);
+                //status_app.Fill = new SolidColorBrush(Colors.LimeGreen);
                 button_stop.IsEnabled = true;
                 button_start.IsEnabled = false;
                 button_reset.IsEnabled = false;
@@ -206,7 +218,7 @@ namespace LavieDemo
             //plc.WriteData("DB1.DBX0.1", false);
             _timer.Stop(); 
             _appStatus = false;
-            status_app.Fill = new SolidColorBrush(Colors.Red);
+            //status_app.Fill = new SolidColorBrush(Colors.Red);
             button_start.IsEnabled = true;
             button_stop.IsEnabled = false;
             button_reset.IsEnabled = true;
@@ -224,6 +236,7 @@ namespace LavieDemo
                 totalCountLabel.Text = _totalCount.ToString();
                 okCountLabel.Text = _okCount.ToString();
                 ngCountLabel.Text = _ngCount.ToString();
+                ocr_text.Text = "";
                 //Reset bộ đếm
                 //plc.WriteData("DB1.DBX0.2", true);
                 //plc.WriteData("DB1.DBX0.2", false);
