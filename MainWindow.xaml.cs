@@ -1,8 +1,9 @@
-﻿using System.Windows;
+﻿using System.Data;
+using System.IO;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
-using Lavie;
 using Microsoft.Web.WebView2.Core;
 
 namespace LavieDemo
@@ -15,18 +16,20 @@ namespace LavieDemo
 
         private bool _camStatus = false;
         private bool _plcStatus = false;
-        private PlcCom plc = new PlcCom();
+        //private PlcCom plc = new PlcCom();
         private bool _appStatus = false;
         private int _totalCount = 0;
         private int _okCount = 0;
         private int _ngCount = 0;
         private DispatcherTimer _timer;
+        private TCPServer _tcpServer;
         public MainWindow()
         {
             InitializeComponent();
-            InitPLC();
+            //InitPLC();
             InitCamView();
             InitTimer();
+            InitTCPServer();
         }
         private void InitTimer()
         {
@@ -37,22 +40,80 @@ namespace LavieDemo
             //Start timer update data
             _timer.Start();
         }
-        private void Timer_Tick(object? sender, EventArgs e)
+
+        private void InitTCPServer()
         {
-            //Đọc dữ liệu counter
-            _totalCount = int.Parse(plc.ReadData("DB1.DBW2")); //Đọc biến total_count trên DB1
-            _okCount = int.Parse(plc.ReadData("DB1.DBW4")); //Đọc biến ok_count trên DB1
-            double okCountPercent = Math.Round(((double)(_okCount/_totalCount) * 100),2);
+            _tcpServer = new TCPServer("192.168.0.241", 5000);
+            _tcpServer.ClientConnected += message => Dispatcher.Invoke(() => LogMessage(message));
+            _tcpServer.DataReceived += message => Dispatcher.Invoke(() => LogMessage(message));
+            _tcpServer.ErrorOccurred += message => Dispatcher.Invoke(() => LogMessage(message));
+            _tcpServer.Start();
+        }
+
+        private void LogMessage(string message)
+        {
+            message = message.Replace("Received: ", "");
+            // Append the message to a UI element, e.g., a TextBox or ListBox.
+            _totalCount++; //Đọc biến total_count trên DB1
+            if (message == compare_text.Text)
+            {
+                _okCount++;
+            }
+            double okCountPercent = Math.Round(((double)(_okCount / _totalCount) * 100), 2);
             _ngCount = _totalCount - _okCount;
             totalCountLabel.Text = _totalCount.ToString();
             okCountLabel.Text = _okCount.ToString() + " (" + okCountPercent.ToString() + "%)";
-            ngCountLabel.Text = _ngCount.ToString() + " (" + (100-okCountPercent).ToString() + "%)";
+            ngCountLabel.Text = _ngCount.ToString() + " (" + (100 - okCountPercent).ToString() + "%)";
+            ocr_text.Text = message;
+        }
+
+        /*
+        private void InitPLC()
+        {
+            // Khởi tạo PLC (CPU loại S7-1200, địa chỉ IP là 192.168.1.11, Rack 0, Slot 1)
+            try
+            {
+                plc.Connect("192.168.1.11");
+                if (plc.Connected)
+                {
+                    _plcStatus = true;
+                    status_plc.Fill = new SolidColorBrush(Colors.LimeGreen); //cập nhật status của plc
+
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        */
+
+        private void InitCamView()
+        {
+            webView2.Source = new Uri("http://192.168.0.10/pages/hmi/");
+            webView2.NavigationCompleted += WebView_NavigationCompleted;
+        }
+
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+            
+            //Đọc dữ liệu counter
+            //_totalCount = 1; //Đọc biến total_count trên DB1
+            //_okCount = 1; //Đọc biến ok_count trên DB1
+            //double okCountPercent = Math.Round(((double)(_okCount / _totalCount) * 100), 2);
+            //_ngCount = _totalCount - _okCount;
+            //totalCountLabel.Text = _totalCount.ToString();
+            //okCountLabel.Text = _okCount.ToString() + " (" + okCountPercent.ToString() + "%)";
+            //ngCountLabel.Text = _ngCount.ToString() + " (" + (100 - okCountPercent).ToString() + "%)";
             //Đọc trạng thái start/stop
+            /*
             bool new_app_status = false;
             if (plc.ReadData("DB1.DBX0.1") == "True")
             {
                 new_app_status = true;
             }
+            /*
             if (new_app_status != _appStatus)
             {
                 if (_appStatus == true)
@@ -72,9 +133,11 @@ namespace LavieDemo
                     button_reset.IsEnabled = false;
                 }
             }
+            */
             //Đọc trạng thái cam
+            /*
             bool new_cam_status = false;
-            if (plc.ReadData("DB1.DBX0.0") == "True")
+            if (true)  //đọc tín hiệu Online của camera
             {
                 new_cam_status = true;
             }
@@ -91,50 +154,19 @@ namespace LavieDemo
                     status_cam.Fill = new SolidColorBrush(Colors.LimeGreen);
                 }
             }
-        }
-
-        private void InitPLC()
-        {
-            // Khởi tạo PLC (CPU loại S7-1200, địa chỉ IP là 192.168.1.11, Rack 0, Slot 1)
-            try
-            {
-                plc.Connect("192.168.1.11");
-                if (plc.Connected)
-                {
-                    _plcStatus = true;
-                    status_plc.Fill = new SolidColorBrush(Colors.LimeGreen); //cập nhật status của plc
-
-                    
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            
-        }
-        
-        private void InitCamView()
-        {
-            webView2.Source = new Uri("http://192.168.1.36:8087/");
-            webView2.NavigationCompleted += WebView_NavigationCompleted;
+            */
         }
         private void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             if (e.IsSuccess)
             {
-                if (plc.Connected)
-                {
-                    if (plc.ReadData("DB1.DBX0.0") == "True")
-                    {
-                        _camStatus = true;
-                        status_cam.Fill = new SolidColorBrush(Colors.LimeGreen);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Cannot read camera status from PLC. Check again!", "Camera Status Reading Error", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                    _camStatus = true;
+                    status_cam.Fill = new SolidColorBrush(Colors.LimeGreen);
+            }
+            else
+            {
+                _camStatus = false;
+                status_cam.Fill = new SolidColorBrush(Colors.LimeGreen);
             }
         }
 
@@ -145,7 +177,7 @@ namespace LavieDemo
 
             if (result == MessageBoxResult.Yes)
             {
-                plc.Disconnect();
+                //plc.Disconnect();
                 // Đóng ứng dụng
                 Application.Current.Shutdown();
             }
@@ -155,7 +187,7 @@ namespace LavieDemo
         {
             if (_plcStatus && _camStatus)
             {
-                plc.WriteData("DB1.DBX0.1", true);
+                //plc.WriteData("DB1.DBX0.1", true);
                 _timer.Start();
                 _appStatus = true;
                 status_app.Fill = new SolidColorBrush(Colors.LimeGreen);
@@ -171,7 +203,7 @@ namespace LavieDemo
 
         private void button_stop_Click(object sender, RoutedEventArgs e)
         {
-            plc.WriteData("DB1.DBX0.1", false);
+            //plc.WriteData("DB1.DBX0.1", false);
             _timer.Stop(); 
             _appStatus = false;
             status_app.Fill = new SolidColorBrush(Colors.Red);
@@ -193,8 +225,8 @@ namespace LavieDemo
                 okCountLabel.Text = _okCount.ToString();
                 ngCountLabel.Text = _ngCount.ToString();
                 //Reset bộ đếm
-                plc.WriteData("DB1.DBX0.2", true);
-                plc.WriteData("DB1.DBX0.2", false);
+                //plc.WriteData("DB1.DBX0.2", true);
+                //plc.WriteData("DB1.DBX0.2", false);
             }
         }
 
@@ -211,20 +243,6 @@ namespace LavieDemo
             {
                 SettingWindow settingWindow = new SettingWindow();
                 settingWindow.ShowDialog();
-            }
-        }
-
-        private void refresh_cam_status_Click(object sender, RoutedEventArgs e)
-        {
-            if (plc.ReadData("DB1.DBX0.0") == "True")
-            {
-                _camStatus = true;
-                status_cam.Fill = new SolidColorBrush(Colors.LimeGreen);
-            }
-            else
-            {
-                _camStatus = false;
-                status_cam.Fill = new SolidColorBrush(Colors.Red);
             }
         }
     }

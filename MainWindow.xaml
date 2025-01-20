@@ -70,10 +70,10 @@
                 </Grid>
             </Grid>
             <Border Grid.Column="0" Background="LightBlue">
-                <Image Source="Resources/logo.png" Stretch="Uniform" Margin="10"/>
+                <Image Source="/Resources/aecom_logo3.png" Stretch="Uniform" Margin="10"/>
             </Border>
             <Border Grid.Column="1" Background="LightBlue">
-                <TextBlock FontSize="50" FontWeight="SemiBold" Text="DEMO NAVIE" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock FontSize="50" FontWeight="SemiBold" Text="DEMO YOKOWO" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
 
         </Grid>
@@ -109,9 +109,10 @@
 
             <Grid Grid.Column="1" Margin="5 0 0 0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.5*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.8*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="0.8*"/>
                     <RowDefinition Height="3*"/>
                 </Grid.RowDefinitions>
                 <Border Grid.Row="0" Background="Gray" Margin="0 5 0 0">
@@ -147,22 +148,47 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Border Grid.Row="0" Background="LightGray">
-                            <TextBlock x:Name="totalCountLabel" FontSize="25" FontWeight="SemiBold" VerticalAlignment="Center" Margin="20">0</TextBlock>
+                            <TextBlock x:Name="totalCountLabel" FontSize="25" FontWeight="SemiBold" VerticalAlignment="Center" Margin="20 0 0 0">0</TextBlock>
                         </Border>
                         <Border Grid.Row="1" Background="LimeGreen">
-                            <TextBlock x:Name="okCountLabel" FontSize="25" FontWeight="SemiBold" VerticalAlignment="Center" Margin="20">0</TextBlock>
+                            <TextBlock x:Name="okCountLabel" FontSize="25" FontWeight="SemiBold" VerticalAlignment="Center" Margin="20 0 0 0">0</TextBlock>
                         </Border>
                         <Border Grid.Row="2" Background="Red">
-                            <TextBlock x:Name="ngCountLabel" FontSize="25" FontWeight="SemiBold" VerticalAlignment="Center" Margin="20">0</TextBlock>
+                            <TextBlock x:Name="ngCountLabel" FontSize="25" FontWeight="SemiBold" VerticalAlignment="Center" Margin="20 0 0 0">0</TextBlock>
                         </Border>
                     </Grid>
+                    <Grid Grid.Column="2">
+
+                    </Grid>
                 </Grid>
-                <Border Grid.Row="2" Background="Gray" Margin="0 5 0 0">
+                <Border Grid.Row="2" Background="Gray"></Border>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <TextBlock FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Nhập mã cần kiểm tra</TextBlock>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <TextBox FontSize="20" x:Name="compare_text" HorizontalAlignment="Center" Width="200" Height="59" VerticalAlignment="Center"></TextBox>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <TextBlock FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Mã đọc được từ camera</TextBlock>
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <TextBlock x:Name="ocr_text" FontSize="20" HorizontalAlignment="Center" Width="200" Height="59" VerticalAlignment="Center" Background="White"/>
+                    </Grid>
+                </Grid>
+                <Border Grid.Row="3" Background="Gray" Margin="0 5 0 0">
                     <TextBlock FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center">Control Panel</TextBlock>
                 </Border>
-                <Border Grid.Row="3" Background="LightGray">
+                <Border Grid.Row="4" Background="LightGray">
+                    <TextBox x:Name="textbox" TextWrapping="Wrap" Text="TextBox"/>
                 </Border>
-                <Grid Grid.Row="3">
+                <Grid Grid.Row="4">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -176,7 +202,7 @@
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Border Grid.Column="0" Background="LightGray">
-                                <Button x:Name="button_start" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35" Width="80" Cursor="Hand" IsEnabled="True" Click="button_start_Click">START</Button>
+                                <Button x:Name="button_start" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35" Width="80" Cursor="Hand" IsEnabled="False" Click="button_start_Click">START</Button>
                             </Border>
                             <Border Grid.Column="1" Background="LightGray">
                                 <Button x:Name="button_stop" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35" Width="80" Cursor="Hand" IsEnabled="False" Click="button_stop_Click">STOP</Button>

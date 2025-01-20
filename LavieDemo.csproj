@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\logo.png" />
+    <None Remove="Resources\aecom_logo3.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <Resource Include="App.xaml" />
-    <Resource Include="Resources\logo.png" />
+    <Resource Include="Resources\aecom_logo3.png" />
   </ItemGroup>
 
 </Project>

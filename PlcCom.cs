@@ -2,7 +2,7 @@
 using System;
 using System.Windows;
 
-namespace Lavie
+namespace LavieDemo
 {
     public class PlcCom
     {
