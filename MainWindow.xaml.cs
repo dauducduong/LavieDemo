@@ -237,6 +237,8 @@ namespace LavieDemo
                 okCountLabel.Text = _okCount.ToString();
                 ngCountLabel.Text = _ngCount.ToString();
                 ocr_text.Text = "";
+                status_text.Text = "...";
+                status_text.Background = new SolidColorBrush(Colors.LightGray);
                 //Reset bộ đếm
                 //plc.WriteData("DB1.DBX0.2", true);
                 //plc.WriteData("DB1.DBX0.2", false);
